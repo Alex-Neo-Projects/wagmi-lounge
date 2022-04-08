@@ -1,13 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-
+import { SocketContext, socket } from './context/socket'; 
+import { PanGesture } from './PanGesture';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SocketContext.Provider value={socket}>
+      <View style={styles.container}>
+        <Text>supreme potato 🥔</Text>
+        <PanGesture></PanGesture>
+        <StatusBar style="auto" />
+      </View>
+    </SocketContext.Provider>
   );
 }
 
