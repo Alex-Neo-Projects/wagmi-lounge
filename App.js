@@ -52,7 +52,7 @@ export default function App() {
       borderRadius: 100,
       transform: [
         { translateX: withSpring(socketX === undefined ? 0 : socketX) },
-        { translateY: withSpring(socketY === undefined ? 0 : socketY) },
+        { translateY: withSpring(socketY === undefined ? 0 : socketY) },        
       ],
     }
   })
