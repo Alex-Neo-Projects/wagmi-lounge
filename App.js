@@ -5,21 +5,35 @@ import Animated, {
   useAnimatedStyle,
   useAnimatedGestureHandler,
   withSpring,
+  runOnJS,
 } from 'react-native-reanimated'
 import { PanGestureHandler } from 'react-native-gesture-handler'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { socket, SocketContext } from './context/socket'
+
+const data = [
+  {
+    name: 'Cool Cat #1',
+    url:
+      'https://lh3.googleusercontent.com/jJsUhpTNA_9CwMePUgJZamQW1IIHQgt3Hx1of8Y8EHhKqBsjHU9xb03S79xXzqLpGCVUX243N8dxYNkKaRcc51pFQh6bwZg5F8f-Ig',
+  },
+  { name: 'Doodle #1', url: '' },
+]
 
 export default function App() {
   const socket = useContext(SocketContext)
-
-  const startingPositionX = 0
-  const startingPositionY = 0
 
   const x = useSharedValue(0)
   const y = useSharedValue(0)
   const pressed = useSharedValue(false)
 
+  const [xValue, setXValue] = useState()
+  const [yValue, setYValue] = useState()
+
+  const [socketX, setSocketX] = useState(0)
+  const [socketY, setSocketY] = useState(0)
+
+  const [users, setUsers] = useState({})
 
   const uas = useAnimatedStyle(() => {
     return {
@@ -31,23 +45,59 @@ export default function App() {
     }
   })
 
+  const uasToo = useAnimatedStyle(() => {
+    return {
+      height: 100,
+      width: 100,
+      borderRadius: 100,
+      transform: [
+        { translateX: withSpring(socketX === undefined ? 0 : socketX) },
+        { translateY: withSpring(socketY === undefined ? 0 : socketY) },
+      ],
+    }
+  })
+
+  var balls = [uasToo]
+
   const eventHandler = useAnimatedGestureHandler({
     onStart: (event, ctx) => {
       pressed.value = true
-      console.log('pressed!')
+      ctx.startX = x.value
+      ctx.startY = y.value
     },
     onActive: (event, ctx) => {
-      x.value = startingPositionX + event.translationX
-      y.value = startingPositionX + event.translationY
+      x.value = ctx.startX + event.translationX
+      y.value = ctx.startY + event.translationY
 
-      console.log(x.value, y.value); 
+      runOnJS(setXValue)(x.value)
+      runOnJS(setYValue)(y.value)
     },
     onEnd: (event, ctx) => {
       pressed.value = false
-      x.value = withSpring(startingPositionX)
-      y.value = withSpring(startingPositionY)
     },
   })
+
+  useEffect(() => {
+    socket.on('position', (msg) => {
+      setUsers(JSON.parse(msg))
+    })
+  }, [])
+
+
+  useEffect(() => {
+    console.log('curr socketid: ', socket.id); 
+    Object.entries(users).map(([key, value]) => {
+      if (!(key === socket.id)) {
+        setSocketX(value.x);
+        setSocketY(value.y);
+      }
+    });
+  
+  }, [users])
+
+  useEffect(() => {
+    socket.emit('position', JSON.stringify({socketId: socket.id, x: xValue, y: yValue }))
+  }, [xValue, yValue])
 
   return (
     <SocketContext.Provider value={socket}>
@@ -55,8 +105,8 @@ export default function App() {
         <Text>supreme potato 🥔</Text>
 
         <PanGestureHandler onGestureEvent={eventHandler}>
-          <Animated.View style={[uas]}>
-            <Image
+          <Animated.View style={[styles.ball, uas]}>
+            {/* <Image
               style={{
                 width: 100,
                 height: 100,
@@ -66,11 +116,15 @@ export default function App() {
                 uri:
                   'https://lh3.googleusercontent.com/jJsUhpTNA_9CwMePUgJZamQW1IIHQgt3Hx1of8Y8EHhKqBsjHU9xb03S79xXzqLpGCVUX243N8dxYNkKaRcc51pFQh6bwZg5F8f-Ig',
               }}
-            />
+            /> */}
           </Animated.View>
         </PanGestureHandler>
+
+        {balls.map((curr, idx) => (
+          <Animated.View style={[styles.ball, curr]} key={idx.toString()}></Animated.View>
+        ))}
       </View>
-      <StatusBar style='auto'/>
+      <StatusBar style="auto" />
     </SocketContext.Provider>
   )
 }
