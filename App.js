@@ -52,7 +52,7 @@ export default function App() {
       borderRadius: 100,
       transform: [
         { translateX: withSpring(socketX === undefined ? 0 : socketX) },
-        { translateY: withSpring(socketY === undefined ? 0 : socketY) },        
+        { translateY: withSpring(socketY === undefined ? 0 : socketY) },
       ],
     }
   })
@@ -83,20 +83,22 @@ export default function App() {
     })
   }, [])
 
-
+  // user1: {x,y}
+  // user2: {x,y}
   useEffect(() => {
-    console.log('curr socketid: ', socket.id); 
     Object.entries(users).map(([key, value]) => {
       if (!(key === socket.id)) {
-        setSocketX(value.x);
-        setSocketY(value.y);
+        setSocketX(value.x)
+        setSocketY(value.y)
       }
-    });
-  
+    })
   }, [users])
 
   useEffect(() => {
-    socket.emit('position', JSON.stringify({socketId: socket.id, x: xValue, y: yValue }))
+    socket.emit(
+      'position',
+      JSON.stringify({ socketId: socket.id, x: xValue, y: yValue }),
+    )
   }, [xValue, yValue])
 
   return (
@@ -119,10 +121,20 @@ export default function App() {
             /> */}
           </Animated.View>
         </PanGestureHandler>
-
+        {/* 
         {balls.map((curr, idx) => (
           <Animated.View style={[styles.ball, curr]} key={idx.toString()}></Animated.View>
-        ))}
+        ))} */}
+
+        {Object.entries(users).map(([key, value]) => {
+          // console.log(socket.id)
+          if (!(key === socket.id)) {
+            return (<Animated.View style={[styles.ball, uasToo]} key={socket.id.toString()}></Animated.View>);
+
+            // setSocketX(value.x)
+            // setSocketY(value.y)
+          }
+        })}
       </View>
       <StatusBar style="auto" />
     </SocketContext.Provider>
@@ -138,7 +150,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   ball: {
-    backgroundColor: 'red',
+    backgroundColor: 'green',
     borderRadius: 100,
     width: 100,
     height: 100,
