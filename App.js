@@ -10,6 +10,7 @@ import Animated, {
 import { PanGestureHandler } from 'react-native-gesture-handler'
 import { useContext, useEffect, useState } from 'react'
 import { socket, SocketContext } from './context/socket'
+import { Ball } from './Ball'; 
 
 const data = [
   {
@@ -30,8 +31,8 @@ export default function App() {
   const [xValue, setXValue] = useState()
   const [yValue, setYValue] = useState()
 
-  const [socketX, setSocketX] = useState(0)
-  const [socketY, setSocketY] = useState(0)
+  const [socketX, setSocketX] = useState({})
+  const [socketY, setSocketY] = useState({})
 
   const [users, setUsers] = useState({})
 
@@ -45,19 +46,11 @@ export default function App() {
     }
   })
 
-  const uasToo = useAnimatedStyle(() => {
-    return {
-      height: 100,
-      width: 100,
-      borderRadius: 100,
-      transform: [
-        { translateX: withSpring(socketX === undefined ? 0 : socketX) },
-        { translateY: withSpring(socketY === undefined ? 0 : socketY) },
-      ],
-    }
-  })
+  // two problems: 
+  //  - 1: need to duplicate x amount of 'uasToo'
+  //  - 2: need to have independent socketX, socketY values
 
-  var balls = [uasToo]
+  // solution: store socketX, socketY in state array tied to socketId's
 
   const eventHandler = useAnimatedGestureHandler({
     onStart: (event, ctx) => {
@@ -88,8 +81,14 @@ export default function App() {
   useEffect(() => {
     Object.entries(users).map(([key, value]) => {
       if (!(key === socket.id)) {
-        setSocketX(value.x)
-        setSocketY(value.y)
+        let socketXCopy = { ...socketX }; 
+        socketXCopy[socket.id] = value.x;
+        
+        let socketYCopy = { ...socketY }; 
+        socketYCopy[socket.id] = value.y;
+        
+        setSocketX(socketXCopy)
+        setSocketY(socketYCopy)
       }
     })
   }, [users])
@@ -108,31 +107,21 @@ export default function App() {
 
         <PanGestureHandler onGestureEvent={eventHandler}>
           <Animated.View style={[styles.ball, uas]}>
-            {/* <Image
+            <Image
               style={{
                 width: 100,
                 height: 100,
                 borderRadius: 100,
+                borderColor: 'yellow',
+                borderWidth: 10,
               }}
-              source={{
-                uri:
-                  'https://lh3.googleusercontent.com/jJsUhpTNA_9CwMePUgJZamQW1IIHQgt3Hx1of8Y8EHhKqBsjHU9xb03S79xXzqLpGCVUX243N8dxYNkKaRcc51pFQh6bwZg5F8f-Ig',
-              }}
-            /> */}
+              source={{ uri: users[socket.id] === undefined ? null : users[socket.id].currImage}}
+            />
           </Animated.View>
         </PanGestureHandler>
-        {/* 
-        {balls.map((curr, idx) => (
-          <Animated.View style={[styles.ball, curr]} key={idx.toString()}></Animated.View>
-        ))} */}
-
         {Object.entries(users).map(([key, value]) => {
-          // console.log(socket.id)
           if (!(key === socket.id)) {
-            return (<Animated.View style={[styles.ball, uasToo]} key={socket.id.toString()}></Animated.View>);
-
-            // setSocketX(value.x)
-            // setSocketY(value.y)
+            return(<Ball x={users[key].x} y={users[key].y} imageUrl={users[key].currImage} key={key}/>);
           }
         })}
       </View>
