@@ -3,6 +3,7 @@
     "name": "supreme-potato",
     "slug": "supreme-potato",
     "version": "1.0.0",
+    "owner": "wagmi",   
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
