@@ -36,7 +36,7 @@ export default function App() {
 
   const [users, setUsers] = useState({})
 
-  const [text, onChangeText] = useState(' ')
+  const [text, onChangeText] = useState('')
 
   const [initial, setInitial] = useState(true)
   const [loading, setLoading] = useState(false)
@@ -106,12 +106,12 @@ export default function App() {
   }, [users])
 
   useEffect(() => {
-    setTimeout(() => {
+    // setTimeout(() => {
       socket.emit(
         'position',
         JSON.stringify({ socketId: socket.id, x: xValue, y: yValue }),
       )
-    }, 500)
+    // }, 500)
   }, [xValue, yValue])
 
   useEffect(() => {
@@ -164,15 +164,15 @@ export default function App() {
                 flexDirection: 'column',
                 alignItems: 'flex-start',
                 justifyContent: 'flex-start',
-                paddingTop: 70,
+                paddingTop: 50,
                 paddingLeft: 15,
-                height: '15%',
+                height: '25%',
                 width: '100%',
               }}
             >
-              {/* <Text style={{ fontSize: 30, fontFamily: 'SFProRoundedBold' }}>
-                🛋
-              </Text> */}
+              <Text style={{ fontSize: 40, fontFamily: 'SFProRoundedBold' }}>
+                wagmi lounge 🛋
+              </Text>
             </View>
 
             <PanGestureHandler onGestureEvent={eventHandler}>
@@ -195,7 +195,7 @@ export default function App() {
                     width: 200,
                     padding: 5,
                     position: 'absolute',
-                    bottom: 80,
+                    bottom: 95,
                   }}
                 >
                   <Text
@@ -211,8 +211,8 @@ export default function App() {
 
                 <Image
                   style={{
-                    width: 60,
-                    height: 60,
+                    width: 85,
+                    height: 85,
                     borderRadius: 100,
                     borderColor: '#D3D3D3',
                     overflow: 'hidden',
@@ -258,7 +258,8 @@ export default function App() {
                   height: 50,
                   borderColor: '#000000',
                   borderWidth: 3,
-                  padding: 12,
+                  paddingLeft: 13,
+                  paddingRight: 13,
                   borderRadius: 100,
                   fontSize: 20,
                   fontFamily: 'SFProRoundedBold',
@@ -269,6 +270,9 @@ export default function App() {
                 }}
                 onChangeText={onChangeText}
                 value={text}
+                placeholderTextColor={'rgb(142,142,142)'}
+                placeholder={'type here'}
+                autoCorrect={false}
                 maxLength={60}
               />
             </View>

@@ -60,8 +60,8 @@ export function Ball(props) {
 
         <Image
           style={{
-            width: 60,
-            height: 60,
+            width: 85,
+            height: 85,
             borderRadius: 100,
             borderColor: '#D3D3D3',
             overflow: 'hidden',
