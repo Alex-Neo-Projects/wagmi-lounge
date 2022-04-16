@@ -43,6 +43,8 @@ export function Ball(props) {
             justifyContent: 'center',
             width: 200,
             padding: 5,
+            position: 'absolute',
+            bottom: 70,
           }}
         >
           <Text

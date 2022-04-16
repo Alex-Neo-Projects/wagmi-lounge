@@ -106,10 +106,12 @@ export default function App() {
   }, [users])
 
   useEffect(() => {
-    socket.emit(
-      'position',
-      JSON.stringify({ socketId: socket.id, x: xValue, y: yValue }),
-    )
+    setTimeout(() => {
+      socket.emit(
+        'position',
+        JSON.stringify({ socketId: socket.id, x: xValue, y: yValue }),
+      )
+    }, 500)
   }, [xValue, yValue])
 
   useEffect(() => {
@@ -192,6 +194,8 @@ export default function App() {
                     justifyContent: 'center',
                     width: 200,
                     padding: 5,
+                    position: 'absolute',
+                    bottom: 80,
                   }}
                 >
                   <Text
@@ -258,9 +262,10 @@ export default function App() {
                   borderRadius: 100,
                   fontSize: 20,
                   fontFamily: 'SFProRoundedBold',
-                  color: '#000000',
+                  color: '#ffffff',
                   position: 'absolute',
                   bottom: 25,
+                  backgroundColor: '#000000',
                 }}
                 onChangeText={onChangeText}
                 value={text}
