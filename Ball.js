@@ -1,14 +1,11 @@
-import Animated, {
-  useAnimatedStyle,
-  withSpring,
-} from 'react-native-reanimated'
-import { StyleSheet, Image } from 'react-native'
+import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
+import { Image, Text, View } from 'react-native'
 
 export function Ball(props) {
   const uas = useAnimatedStyle(() => {
     return {
-      height: 100,
-      width: 100,
+      height: 60,
+      width: 60,
       borderRadius: 100,
       transform: [
         { translateX: withSpring(props.x === undefined ? 0 : props.x) },
@@ -16,26 +13,60 @@ export function Ball(props) {
       ],
     }
   })
-  
-  return (
-    <Animated.View style={[styles.ball, uas]}>
-      <Image
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: 100,
-        }}
-        source={{ uri: props.imageUrl}}
-      />
-    </Animated.View>
-  );
-}
 
-const styles = StyleSheet.create({
-  ball: {
-    backgroundColor: 'green',
-    borderRadius: 100,
-    width: 100,
-    height: 100,
-  },
-})
+  return (
+    <View
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 200,
+        padding: 5,
+      }}
+    >
+      <Animated.View
+        style={[
+          {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+          uas,
+        ]}
+      >
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 200,
+            padding: 5,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 14,
+              color: '#000000',
+              fontFamily: 'SFProRoundedBold',
+            }}
+          >
+            {props.chat}
+          </Text>
+        </View>
+
+        <Image
+          style={{
+            width: 60,
+            height: 60,
+            borderRadius: 100,
+            borderColor: '#D3D3D3',
+            overflow: 'hidden',
+          }}
+          source={{ uri: props.imageUrl }}
+        />
+      </Animated.View>
+    </View>
+  )
+}
