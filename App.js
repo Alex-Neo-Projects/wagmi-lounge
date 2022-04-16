@@ -43,8 +43,8 @@ export default function App() {
 
   const uas = useAnimatedStyle(() => {
     return {
-      height: 100,
-      width: 100,
+      height: 85,
+      width: 85,
       borderRadius: 100,
       transform: [{ translateX: x.value }, { translateY: y.value }],
     }
@@ -160,7 +160,7 @@ export default function App() {
               style={{
                 display: 'flex',
                 position: 'absolute',
-                top: 0,
+                top: 20,
                 flexDirection: 'column',
                 alignItems: 'flex-start',
                 justifyContent: 'flex-start',
@@ -170,8 +170,8 @@ export default function App() {
                 width: '100%',
               }}
             >
-              <Text style={{ fontSize: 40, fontFamily: 'SFProRoundedBold' }}>
-                wagmi lounge 🛋
+              <Text style={{ fontSize: 30, fontFamily: 'SFProRoundedBold', color: '#FB63EC' }}>
+                wagmi lounge 🛋 ☕️
               </Text>
             </View>
 
@@ -182,6 +182,7 @@ export default function App() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    backgroundColor: 'red', 
                   },
                   uas,
                 ]}
@@ -214,7 +215,7 @@ export default function App() {
                     width: 85,
                     height: 85,
                     borderRadius: 100,
-                    borderColor: '#D3D3D3',
+                    borderColor: '#D4D4D4',
                     overflow: 'hidden',
                     borderWidth: 4,
                   }}
