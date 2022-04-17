@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "supreme-potato",
-    "slug": "supreme-potato",
+    "name": "wagmi lounge",
+    "slug": "wagmi-lounge",
     "version": "1.0.0",
-    "owner": "wagmi",   
+    "owner": "wagmi",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.alex243.wagmilounge"
     },
     "android": {
       "adaptiveIcon": {

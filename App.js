@@ -6,6 +6,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   ActivityIndicator,
+  Dimensions
 } from 'react-native'
 import Animated, {
   useSharedValue,
@@ -14,7 +15,7 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated'
 import { PanGestureHandler } from 'react-native-gesture-handler'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState, useCallback } from 'react'
 import { SocketContext } from './context/socket'
 import { Ball } from './Ball'
 import { useFonts } from 'expo-font'
@@ -31,8 +32,8 @@ export default function App() {
   const [xValue, setXValue] = useState()
   const [yValue, setYValue] = useState()
 
-  const [socketX, setSocketX] = useState({})
-  const [socketY, setSocketY] = useState({})
+  // const [socketX, setSocketX] = useState({})
+  // const [socketY, setSocketY] = useState({})
 
   const [users, setUsers] = useState({})
 
@@ -41,6 +42,24 @@ export default function App() {
   const [initial, setInitial] = useState(true)
   const [loading, setLoading] = useState(false)
 
+  // let getRealCoords = useCallback((canvasX, canvasY, canvasWidth, canvasHeight) => {
+  //   // coords are the incoming x/y and the sending users' canvas/screen size
+  //   // coords = {
+  //   //   canvasX,
+  //   //   canvasY,
+  //   //   canvasWidth,
+  //   //   canvasHeight
+  //   // }
+  //   let realX = canvasX * (Dimensions.get('window').width / canvasWidth);
+  //   let realY = canvasY * (Dimensions.get('window').height / canvasHeight);
+  
+  //   console.log(realX, realY);
+  //   return { x: realX.round(), y: realY.round() };
+  // }, [])
+  
+  // Number.prototype.round = function(decimals = 0) { return Number(Math.round(this + 'e' + decimals) + 'e-' + decimals) }
+
+  
   const uas = useAnimatedStyle(() => {
     return {
       height: 85,
@@ -83,18 +102,21 @@ export default function App() {
       setLoading(true)
     }
 
-    Object.entries(users).map(([key, value]) => {
-      if (!(key === socket.id)) {
-        let socketXCopy = { ...socketX }
-        socketXCopy[socket.id] = value.x
+    // Object.entries(users).map(([key, value]) => {
+    //   if (!(key === socket.id)) {
+    //     let socketXCopy = { ...socketX }
+    //     socketXCopy[socket.id] = value.x
 
-        let socketYCopy = { ...socketY }
-        socketYCopy[socket.id] = value.y
+    //     let socketYCopy = { ...socketY }
+    //     socketYCopy[socket.id] = value.y
 
-        setSocketX(socketXCopy)
-        setSocketY(socketYCopy)
-      }
-    })
+    //     // console.log(value.y, value.x);
+    //     // var realX = getRealCoords(socketXCopy, socketYCopy, )
+    //     // console.log(realX)
+    //     setSocketX(socketXCopy)
+    //     setSocketY(socketYCopy)
+    //   }
+    // })
 
     if (initial) {
       setInitial(false)
@@ -207,7 +229,7 @@ export default function App() {
                     }}
                   >
                     {text}
-                  </Text>
+                  </Text> 
                 </View>
 
                 <Image
@@ -275,6 +297,7 @@ export default function App() {
                 placeholder={'type here'}
                 autoCorrect={false}
                 maxLength={60}
+                autoCapitalize={'none'}
               />
             </View>
           </View>
